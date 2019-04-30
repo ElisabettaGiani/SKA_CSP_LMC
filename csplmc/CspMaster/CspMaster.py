@@ -367,10 +367,10 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
             try: 
                 log_msg = "Trying connection to" + str(self._se_list[nelem]) + " device"
                 self.dev_logging(log_msg, int(tango.LogLevel.LOG_INFO))
-                print("Trying connection to {} device", str(self._se_list[nelem]))
+                print("Trying connection to device ", str(self._se_list[nelem]))
                 device_proxy = DeviceProxy(self._se_list[nelem])
                 device_proxy.ping()
-                self._se_proxies.update([(self._se_list[nelem], device_proxy)])
+                self._se_proxies[self._se_list[nelem]] = device_proxy
                 # Subscription of sub-element attributes: State and healthState 
                 ev_id = device_proxy.subscribe_event("State", EventType.CHANGE_EVENT, 
                                         self.seSCMCallback, stateless=True)
@@ -379,7 +379,7 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
                                         self.seSCMCallback, stateless=True)
                 self._event_id.append(ev_id)
                 #self._se_proxies["CBF"] = device_proxy
-                #print(self._se_proxies)
+                print(self._se_proxies)
             except tango.DevFailed as df:
                 for err in range(0, len(df.args)):
                     log_msg = "Failure in connection to " + str(self._se_list[nelem]) + " device: " +\
@@ -414,7 +414,6 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
 
     def read_cspCbfState(self):
         # PROTECTED REGION ID(CspMaster.cspCbfState_read) ENABLED START #
-        print("time: {} read_cspCbfState: {}".format(time.time(), self._cbf_state))
         return self._cbf_state
         # PROTECTED REGION END #    //  CspMaster.cspCbfState_read
 
@@ -530,7 +529,16 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
     @DebugIt()
     def On(self, argin):
         # PROTECTED REGION ID(CspMaster.On) ENABLED START #
-        pass
+        if len(argin) > 0:
+            for nelem in range(0, len(argin)):
+                device_name = argin[nelem]
+                device_proxy = self._se_proxies[device_name]
+                device_proxy.command_inout("On", "")
+        else:
+            for nelem in range(0, len(self._se_list)):
+                device_name = self._se_list[nelem]
+                device_proxy = self._se_proxies[device_name]
+                device_proxy.command_inout("On", "")
         # PROTECTED REGION END #    //  CspMaster.On
 
     @command(
@@ -546,7 +554,6 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
     @command(
     dtype_in=('str',), 
     doc_in="If the array length is 0, the command applies to the whole\nCSP Element.\nIf the array length is > 1, each array element specifies the FQDN of the\nCSP SubElement to switch OFF.", 
-    )
     )
     @DebugIt()
     def Standby(self,argin):
