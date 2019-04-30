@@ -58,7 +58,7 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
                         # should NOT happen!
                         #print("Received state change for device: {}".format(evt.attr_name))
                         log_msg = "Received health state change for unknown device " + \
-                                  str(evt.attr_name))
+                                  str(evt.attr_name)
                         self.dev_logging(log_msg, tango.LogLevel.LOG_WARN)
                         return
                 if "healthState" == evt.attr_value.name: 
@@ -74,7 +74,7 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
                         # should NOT happen!
                         #print("Received health state change for device: {}".format(evt.attr_name))
                         log_msg = "Received health state change for unknown device " + \
-                                  str(evt.attr_name))
+                                  str(evt.attr_name)
                         self.dev_logging(log_msg, tango.LogLevel.LOG_WARN)
                         return
                 # update CSP global state
@@ -370,6 +370,7 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
                 print("Trying connection to {} device", str(self._se_list[nelem]))
                 device_proxy = DeviceProxy(self._se_list[nelem])
                 device_proxy.ping()
+                self._se_proxies.update([(self._se_list[nelem], device_proxy)])
                 # Subscription of sub-element attributes: State and healthState 
                 ev_id = device_proxy.subscribe_event("State", EventType.CHANGE_EVENT, 
                                         self.seSCMCallback, stateless=True)
@@ -524,7 +525,7 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
 
     @command(
     dtype_in=('str',), 
-    doc_in="If the array length is0, the command apllies to the whole\nCSP Element.\nIf the array length is > 1, each array element specifies the FQDN of the\nCSP SubElement to switch ON.", 
+    doc_in="If the array length is 0, the command applies to the whole\nCSP Element.\nIf the array length is > 1, each array element specifies the FQDN of the\nCSP SubElement to switch ON.", 
     )
     @DebugIt()
     def On(self, argin):
@@ -534,7 +535,7 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
 
     @command(
     dtype_in=('str',), 
-    doc_in="If the array length is0, the command apllies to the whole\nCSP Element.\nIf the array length is > 1, each array element specifies the FQDN of the\nCSP SubElement to switch OFF.", 
+    doc_in="If the array length is 0, the command applies to the whole\nCSP Element.\nIf the array length is > 1, each array element specifies the FQDN of the\nCSP SubElement to switch OFF.", 
     )
     @DebugIt()
     def Off(self, argin):
@@ -543,9 +544,12 @@ class CspMaster(with_metaclass(DeviceMeta,SKAMaster)):
         # PROTECTED REGION END #    //  CspMaster.Off
 
     @command(
+    dtype_in=('str',), 
+    doc_in="If the array length is 0, the command applies to the whole\nCSP Element.\nIf the array length is > 1, each array element specifies the FQDN of the\nCSP SubElement to switch OFF.", 
+    )
     )
     @DebugIt()
-    def Standby(self):
+    def Standby(self,argin):
         # PROTECTED REGION ID(CspMaster.Standby) ENABLED START #
         pass
         # PROTECTED REGION END #    //  CspMaster.Standby

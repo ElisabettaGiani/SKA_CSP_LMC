@@ -103,7 +103,7 @@
       <status abstract="false" inherited="true" concrete="true"/>
     </commands>
     <commands name="On" description="Transit CSP or one or more CSP SubElements fromSTANDBY to ON" execMethod="on" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
-      <argin description="If the array length is0, the command apllies to the whole&#xA;CSP Element.&#xA;If the array length is > 1, each array element specifies the FQDN of the&#xA;CSP SubElement to switch ON.">
+      <argin description="If the array length is 0, the command applies to the whole&#xA;CSP Element.&#xA;If the array length is > 1, each array element specifies the FQDN of the&#xA;CSP SubElement to switch ON.">
         <type xsi:type="pogoDsl:StringArrayType"/>
       </argin>
       <argout description="">
@@ -112,7 +112,7 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
     <commands name="Off" description="Transit CSP or one or more CSP SubElements from ON to OFF." execMethod="off" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
-      <argin description="If the array length is0, the command apllies to the whole&#xA;CSP Element.&#xA;If the array length is > 1, each array element specifies the FQDN of the&#xA;CSP SubElement to switch OFF.">
+      <argin description="If the array length is 0, the command applies to the whole&#xA;CSP Element.&#xA;If the array length is > 1, each array element specifies the FQDN of the&#xA;CSP SubElement to switch OFF.">
         <type xsi:type="pogoDsl:StringArrayType"/>
       </argin>
       <argout description="">
@@ -121,8 +121,8 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
     <commands name="Standby" description="Transit CSP or one or more CSP SubElements from ON/OFF to &#xA;STANDBY." execMethod="standby" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
-      <argin description="If the array length is0, the command apllies to the whole&#xA;CSP Element.&#xA;If the array length is > 1, each array element specifies the FQDN of the&#xA;CSP SubElement to put in STANDBY mode.">
-        <type xsi:type="pogoDsl:VoidType"/>
+      <argin description="If the array length is 0, the command applies to the whole&#xA;CSP Element.&#xA;If the array length is > 1, each array element specifies the FQDN of the&#xA;CSP SubElement to put in STANDBY mode.">
+        <type xsi:type="pogoDsl:StringArrayType"/>
       </argin>
       <argout description="">
         <type xsi:type="pogoDsl:VoidType"/>
